@@ -14,7 +14,8 @@ const Auth = () => {
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
-  const API_URL = process.env.REACT_APP_API_URL; // NO trailing slash
+  // ✅ Make sure there is NO trailing slash
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,10 +25,10 @@ const Auth = () => {
       let res;
 
       if (isLogin) {
-        res = await axios.post(`${API_URL}/api/auth/login`, { email, password }, {
-          withCredentials: true, // optional if you use cookies
-        });
+        // ✅ Correct API path
+        res = await axios.post(`${API_URL}/api/auth/login`, { email, password });
         login(res.data.token);
+        setMessage("Login successful!");
         navigate("/");
       } else {
         res = await axios.post(`${API_URL}/api/auth/signup`, { name, email, password });
@@ -35,11 +36,13 @@ const Auth = () => {
         setIsLogin(true);
       }
 
+      // Reset form
       setName("");
       setEmail("");
       setPassword("");
     } catch (err) {
       console.error("Auth error:", err);
+      // Display message from server if available
       setMessage(err.response?.data?.message || "Something went wrong");
     }
   };
@@ -48,7 +51,9 @@ const Auth = () => {
     <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" bgcolor="#f5f5f5">
       <Card sx={{ minWidth: 400, padding: 3 }}>
         <CardContent>
-          <Typography variant="h5" gutterBottom>{isLogin ? "Login" : "Signup"}</Typography>
+          <Typography variant="h5" gutterBottom>
+            {isLogin ? "Login" : "Signup"}
+          </Typography>
 
           <form onSubmit={handleSubmit}>
             {!isLogin && (
@@ -87,11 +92,17 @@ const Auth = () => {
             </Button>
           </form>
 
-          <Typography sx={{ mt: 2, cursor: "pointer", color: "blue" }} onClick={() => { setIsLogin(!isLogin); setMessage(""); }}>
+          <Typography
+            sx={{ mt: 2, cursor: "pointer", color: "blue" }}
+            onClick={() => {
+              setIsLogin(!isLogin);
+              setMessage("");
+            }}
+          >
             {isLogin ? "Don't have an account? Signup" : "Already have an account? Login"}
           </Typography>
 
-          {message && <Typography sx={{ mt: 2, color: "green" }}>{message}</Typography>}
+          {message && <Typography sx={{ mt: 2, color: message.includes("successful") ? "green" : "red" }}>{message}</Typography>}
         </CardContent>
       </Card>
     </Box>
