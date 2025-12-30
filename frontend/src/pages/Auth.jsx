@@ -14,7 +14,7 @@ const Auth = () => {
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
-  const API_URL = process.env.REACT_APP_API_URL; // no trailing slash
+  const API_URL = process.env.REACT_APP_API_URL; // NO trailing slash
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,7 +24,9 @@ const Auth = () => {
       let res;
 
       if (isLogin) {
-        res = await axios.post(`${API_URL}/api/auth/login`, { email, password });
+        res = await axios.post(`${API_URL}/api/auth/login`, { email, password }, {
+          withCredentials: true, // optional if you use cookies
+        });
         login(res.data.token);
         navigate("/");
       } else {
