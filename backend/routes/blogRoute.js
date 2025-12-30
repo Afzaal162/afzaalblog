@@ -14,19 +14,19 @@ import protect from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-/* ===============================
+/* ===========================
    PUBLIC ROUTES
-================================ */
-router.get("/", getAllBlogs);
-router.get("/:id", getBlogById);
-router.get("/category/:category", getBlogsByCategory);
+=========================== */
+router.get("/", getAllBlogs);                     // GET all blogs
+router.get("/:id", getBlogById);                 // GET single blog by ID
+router.get("/category/:category", getBlogsByCategory); // GET blogs by category
 
-/* ===============================
+/* ===========================
    PROTECTED ROUTES
-================================ */
-router.post("/add", protect, uploadCloud.single("image"), addBlog);
-router.get("/my-blogs", protect, getMyBlogs);
-router.put("/edit/:id", protect, uploadCloud.single("image"), editBlog);
-router.delete("/:id", protect, deleteBlog);
+=========================== */
+router.post("/add", protect, uploadCloud.single("image"), addBlog); // Add new blog
+router.get("/my-blogs", protect, getMyBlogs);                       // Get logged-in user blogs
+router.put("/edit/:id", protect, uploadCloud.single("image"), editBlog); // Edit blog
+router.delete("/:id", protect, deleteBlog);                         // Delete blog
 
 export default router;

@@ -6,9 +6,7 @@ import mongoose from "mongoose";
 =========================== */
 export const getAllBlogs = async (req, res) => {
   try {
-    const blogs = await Blog.find()
-      .populate("author", "name email");
-
+    const blogs = await Blog.find().populate("author", "name email");
     res.status(200).json(blogs);
   } catch (err) {
     console.error("Error fetching blogs:", err);
@@ -27,11 +25,15 @@ export const addBlog = async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
+    if (!req.user || !req.user._id) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
+
     const newBlog = new Blog({
       title,
       description,
       category,
-      author: req.user._id, // 🔥 logged-in user
+      author: req.user._id,
       image: req.file ? req.file.path : "",
     });
 
@@ -52,8 +54,10 @@ export const getBlogById = async (req, res) => {
       return res.status(400).json({ message: "Invalid blog ID" });
     }
 
-    const blog = await Blog.findById(req.params.id)
-      .populate("author", "name email");
+    const blog = await Blog.findById(req.params.id).populate(
+      "author",
+      "name email"
+    );
 
     if (!blog) {
       return res.status(404).json({ message: "Blog not found" });
@@ -67,12 +71,18 @@ export const getBlogById = async (req, res) => {
 };
 
 /* ===========================
-   GET LOGGED-IN USER BLOGS (PROFILE)
+   GET LOGGED-IN USER BLOGS
 =========================== */
 export const getMyBlogs = async (req, res) => {
   try {
-    const blogs = await Blog.find({ author: req.user._id })
-      .populate("author", "name email");
+    if (!req.user || !req.user._id) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
+
+    const blogs = await Blog.find({ author: req.user._id }).populate(
+      "author",
+      "name email"
+    );
 
     res.status(200).json(blogs);
   } catch (err) {
@@ -84,6 +94,9 @@ export const getMyBlogs = async (req, res) => {
 /* ===========================
    EDIT BLOG (Owner Only)
 =========================== */
+/* ===========================
+   EDIT BLOG (No Author Check)
+=========================== */
 export const editBlog = async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);
@@ -92,18 +105,11 @@ export const editBlog = async (req, res) => {
       return res.status(404).json({ message: "Blog not found" });
     }
 
-    // 🔒 Ensure blog owner
-    if (blog.author.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ message: "Not authorized" });
-    }
-
+    // Update fields
     blog.title = req.body.title || blog.title;
     blog.description = req.body.description || blog.description;
     blog.category = req.body.category || blog.category;
-
-    if (req.file?.path) {
-      blog.image = req.file.path;
-    }
+    if (req.file?.path) blog.image = req.file.path;
 
     const updatedBlog = await blog.save();
     res.status(200).json(updatedBlog);
@@ -114,7 +120,7 @@ export const editBlog = async (req, res) => {
 };
 
 /* ===========================
-   DELETE BLOG (Owner Only)
+   DELETE BLOG (No Author Check)
 =========================== */
 export const deleteBlog = async (req, res) => {
   try {
@@ -124,11 +130,6 @@ export const deleteBlog = async (req, res) => {
       return res.status(404).json({ message: "Blog not found" });
     }
 
-    // 🔒 Ensure blog owner
-    if (blog.author.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ message: "Not authorized" });
-    }
-
     await blog.deleteOne();
     res.status(200).json({ message: "Blog deleted successfully" });
   } catch (err) {
@@ -136,7 +137,11 @@ export const deleteBlog = async (req, res) => {
     res.status(500).json({ message: "Error deleting blog" });
   }
 };
-// Get blogs by category
+
+
+/* ===========================
+   GET BLOGS BY CATEGORY
+=========================== */
 export const getBlogsByCategory = async (req, res) => {
   try {
     const category = req.params.category;
