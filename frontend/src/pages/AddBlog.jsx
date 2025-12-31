@@ -38,7 +38,7 @@ const AddBlog = () => {
       setLoading(true);
       setMessage("");
 
-      const res = await axios.post(`${API_URL}/blogs/add`, formData, {
+      const res = await axios.post(`${API_URL}/api/blogs/add`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
