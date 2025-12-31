@@ -17,9 +17,11 @@ const router = express.Router();
 /* ===========================
    PUBLIC ROUTES
 =========================== */
-router.get("/", getAllBlogs);                     // GET all blogs
-router.get("/:id", getBlogById);                 // GET single blog by ID
+
+// Move category route BEFORE /:id
 router.get("/category/:category", getBlogsByCategory); // GET blogs by category
+router.get("/", getAllBlogs);                           // GET all blogs
+router.get("/:id", getBlogById);                        // GET single blog by ID
 
 /* ===========================
    PROTECTED ROUTES
