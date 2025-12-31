@@ -1,13 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import {
-  Box,
-  TextField,
-  Button,
-  Typography,
-  Stack,
-  MenuItem,
-} from "@mui/material";
+import { Box, TextField, Button, Typography, Stack, MenuItem } from "@mui/material";
 
 const categories = ["ALL", "WEBDEV", "APPDEV", "IOS DEV", "AI&ML"];
 
@@ -17,6 +10,7 @@ const AddBlog = () => {
   const [category, setCategory] = useState("");
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   const API_URL = process.env.REACT_APP_API_URL;
 
@@ -24,7 +18,13 @@ const AddBlog = () => {
     e.preventDefault();
 
     if (!title || !description || !category) {
-      alert("Please fill all required fields");
+      setMessage("Please fill all required fields.");
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setMessage("You must be logged in to add a blog.");
       return;
     }
 
@@ -32,25 +32,22 @@ const AddBlog = () => {
     formData.append("title", title);
     formData.append("description", description);
     formData.append("category", category);
-    if (image) formData.append("image", image);
-
-    const token = localStorage.getItem("token"); // ✅ get JWT token
-
-    if (!token) {
-      alert("You must be logged in to add a blog");
-      return;
-    }
+    if (image) formData.append("image", image); // Must match backend field
 
     try {
       setLoading(true);
+      setMessage("");
+
       const res = await axios.post(`${API_URL}/blogs/add`, formData, {
         headers: {
-          Authorization: `Bearer ${token}`, // ✅ include token
+          Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       });
 
-      alert("Blog added successfully!");
+      setMessage("Blog added successfully!");
+      console.log("Blog added response:", res.data);
+
       // Reset form
       setTitle("");
       setDescription("");
@@ -58,10 +55,8 @@ const AddBlog = () => {
       setImage(null);
     } catch (err) {
       console.error("Error adding blog:", err.response || err);
-      alert(
-        `Failed to add blog. ${
-          err.response?.data?.message || "Check console for details."
-        }`
+      setMessage(
+        err.response?.data?.message || "Failed to add blog. Check console."
       );
     } finally {
       setLoading(false);
@@ -116,19 +111,28 @@ const AddBlog = () => {
         </Button>
 
         {image && (
-          <>
+          <Box sx={{ mt: 1 }}>
             <Typography>Selected: {image.name}</Typography>
             <img
               src={URL.createObjectURL(image)}
               alt="preview"
               style={{ width: "100%", marginTop: 10 }}
             />
-          </>
+          </Box>
         )}
 
         <Button type="submit" variant="contained" disabled={loading}>
           {loading ? "Adding..." : "Add Blog"}
         </Button>
+
+        {message && (
+          <Typography
+            sx={{ mt: 2 }}
+            color={message.includes("successfully") ? "green" : "error"}
+          >
+            {message}
+          </Typography>
+        )}
       </Stack>
     </Box>
   );
