@@ -15,21 +15,21 @@ const EditBlog = () => {
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Use environment variable for backend URL
-  const API_URL = process.env.REACT_APP_API_URL;
+  const API_URL = process.env.REACT_APP_API_URL; // Ensure no trailing slash
 
   // Fetch blog data
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const res = await axios.get(`${API_URL}/blogs/${id}`);
+        const res = await axios.get(`${API_URL}/api/blogs/${id}`);
         const blog = res.data;
         setTitle(blog.title);
         setDescription(blog.description);
         setCategory(blog.category);
-        setImage(blog.image ? blog.image : null);
+        setImage(blog.image || null);
       } catch (err) {
-        console.error("Error fetching blog:", err);
+        console.error("Error fetching blog:", err.response || err);
+        alert(err.response?.data?.message || "Failed to fetch blog");
       }
     };
     fetchBlog();
@@ -38,25 +38,24 @@ const EditBlog = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("description", description);
-    formData.append("category", category);
-    if (image instanceof File) formData.append("image", image);
-
-    // ✅ Get token from localStorage
     const token = localStorage.getItem("token");
     if (!token) {
       alert("You must be logged in to update a blog");
       return;
     }
 
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("category", category);
+    if (image instanceof File) formData.append("image", image);
+
     try {
       setLoading(true);
-      await axios.put(`${API_URL}/blogs/edit/${id}`, formData, {
+      await axios.put(`${API_URL}/api/blogs/edit/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`, // ✅ Add token here
+          Authorization: `Bearer ${token}`,
         },
       });
       alert("Blog updated successfully!");
@@ -96,9 +95,7 @@ const EditBlog = () => {
           required
         >
           {categories.map((cat) => (
-            <MenuItem key={cat} value={cat}>
-              {cat}
-            </MenuItem>
+            <MenuItem key={cat} value={cat}>{cat}</MenuItem>
           ))}
         </TextField>
 
