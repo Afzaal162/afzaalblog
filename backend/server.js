@@ -3,13 +3,14 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/authRoute.js";
-import blogRoutes from "./routes/blogRoute.js"; // ✅ import blog routes
+import blogRoutes from "./routes/blogRoute.js";
+import userRoutes from "./routes/userRoute.js"; // ✅ import user routes
 
 dotenv.config();
 const app = express();
 
 /* =========================
-   CORS (VERY IMPORTANT)
+   CORS
 ========================= */
 app.use(cors({
   origin: "https://afzaalblog-sje6.vercel.app", // frontend URL
@@ -35,7 +36,7 @@ const connectDB = async () => {
   console.log("MongoDB connected");
 };
 
-// 🔑 connect DB PER REQUEST (serverless-safe)
+// Connect DB per request
 app.use(async (req, res, next) => {
   if (!isConnected) {
     await connectDB();
@@ -46,11 +47,12 @@ app.use(async (req, res, next) => {
 /* =========================
    Routes
 ========================= */
-app.use("/api/auth", authRoutes);   // ✅ auth routes untouched
-app.use("/api/blogs", blogRoutes);  // ✅ add blogs routes
+app.use("/api/auth", authRoutes);   // auth routes
+app.use("/api/blogs", blogRoutes);  // blogs routes
+app.use("/api/users", userRoutes);  // ✅ user/profile routes
 
 /* =========================
-   Health check (optional)
+   Health check
 ========================= */
 app.get("/", (req, res) => {
   res.json({ message: "Backend running 🚀" });
