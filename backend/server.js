@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/authRoute.js";
+import blogRoutes from "./routes/blogRoute.js"; // ✅ import blog routes
 
 dotenv.config();
 const app = express();
@@ -13,6 +14,7 @@ const app = express();
 app.use(cors({
   origin: "https://afzaalblog-sje6.vercel.app", // frontend URL
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  credentials: true
 }));
 
 /* =========================
@@ -44,7 +46,8 @@ app.use(async (req, res, next) => {
 /* =========================
    Routes
 ========================= */
-app.use("/api/auth", authRoutes);
+app.use("/api/auth", authRoutes);   // ✅ auth routes untouched
+app.use("/api/blogs", blogRoutes);  // ✅ add blogs routes
 
 /* =========================
    Health check (optional)
