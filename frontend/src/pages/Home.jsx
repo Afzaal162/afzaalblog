@@ -14,6 +14,8 @@ const Home = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const API_URL = process.env.REACT_APP_API_URL; // Ensure .env has no trailing slash
+
   // Extract search query from URL
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -21,19 +23,27 @@ const Home = () => {
     setSearch(q);
   }, [location.search]);
 
-  // Fetch blogs
+  // Fetch blogs based on search or category
   useEffect(() => {
     const fetchBlogs = async () => {
       setLoading(true);
       try {
-        const url = `${process.env.REACT_APP_API_URL}/api/blogs`;
+        let url = `${API_URL}/api/blogs`;
+        if (category && category !== "ALL") {
+          url = `${API_URL}/api/blogs/category/${category}`;
+        }
 
-        const params = {};
-        if (category !== "ALL") params.category = category;
-        if (search) params.search = search;
+        const res = await axios.get(url);
+        let data = res.data;
 
-        const res = await axios.get(url, { params });
-        setBlogs(res.data);
+        // Optional: filter by search term in frontend
+        if (search) {
+          data = data.filter((b) =>
+            b.title.toLowerCase().includes(search.toLowerCase())
+          );
+        }
+
+        setBlogs(data);
       } catch (err) {
         console.error("Error fetching blogs:", err);
       } finally {
@@ -42,33 +52,21 @@ const Home = () => {
     };
 
     fetchBlogs();
-  }, [category, search]);
+  }, [category, search, API_URL]);
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Header
-        search={search}
-        setSearch={setSearch}
-        category={category}
-        setCategory={setCategory}
-      />
+      <Header search={search} setSearch={setSearch} category={category} setCategory={setCategory} />
 
       {loading ? (
-        <Typography sx={{ textAlign: "center", mt: 5 }}>
-          Loading blogs...
-        </Typography>
+        <Typography sx={{ textAlign: "center", mt: 5 }}>Loading blogs...</Typography>
       ) : blogs.length === 0 ? (
-        <Typography sx={{ textAlign: "center", mt: 5 }}>
-          No blogs found.
-        </Typography>
+        <Typography sx={{ textAlign: "center", mt: 5 }}>No blogs found.</Typography>
       ) : (
         <Grid container spacing={3}>
           {blogs.map((blog) => (
             <Grid key={blog._id} item xs={12} sm={6} md={4}>
-              <BlogCard
-                blog={blog}
-                onReadMore={() => navigate(`/blog/${blog._id}`)}
-              />
+              <BlogCard blog={blog} onReadMore={() => navigate(`/blog/${blog._id}`)} />
             </Grid>
           ))}
         </Grid>
