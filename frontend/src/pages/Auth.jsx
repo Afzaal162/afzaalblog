@@ -14,7 +14,6 @@ const Auth = () => {
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
-  // ✅ Make sure there is NO trailing slash
   const API_URL = process.env.REACT_APP_API_URL;
 
   const handleSubmit = async (e) => {
@@ -25,33 +24,41 @@ const Auth = () => {
       let res;
 
       if (isLogin) {
-        // ✅ Correct API path
         res = await axios.post(`${API_URL}/api/auth/login`, { email, password });
         login(res.data.token);
-        setMessage("Login successful!");
         navigate("/");
       } else {
         res = await axios.post(`${API_URL}/api/auth/signup`, { name, email, password });
-        setMessage(res.data.message || "Signup successful. Please login.");
         setIsLogin(true);
+        setMessage("Signup successful. Please login.");
       }
 
-      // Reset form
       setName("");
       setEmail("");
       setPassword("");
     } catch (err) {
-      console.error("Auth error:", err);
-      // Display message from server if available
       setMessage(err.response?.data?.message || "Something went wrong");
     }
   };
 
   return (
-    <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" bgcolor="#f5f5f5">
-      <Card sx={{ minWidth: 400, padding: 3 }}>
+    <Box
+      minHeight="100vh"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      px={2} // ✅ horizontal padding for mobile
+      bgcolor="#f5f5f5"
+    >
+      <Card
+        sx={{
+          width: "100%",
+          maxWidth: 400, // ✅ responsive instead of minWidth
+          p: 2,
+        }}
+      >
         <CardContent>
-          <Typography variant="h5" gutterBottom>
+          <Typography variant="h5" textAlign="center" gutterBottom>
             {isLogin ? "Login" : "Signup"}
           </Typography>
 
@@ -87,13 +94,20 @@ const Auth = () => {
               required
             />
 
-            <Button variant="contained" color="primary" type="submit" fullWidth sx={{ mt: 2 }}>
+            <Button
+              variant="contained"
+              type="submit"
+              fullWidth
+              sx={{ mt: 2 }}
+            >
               {isLogin ? "Login" : "Signup"}
             </Button>
           </form>
 
           <Typography
-            sx={{ mt: 2, cursor: "pointer", color: "blue" }}
+            mt={2}
+            textAlign="center"
+            sx={{ cursor: "pointer", color: "primary.main" }}
             onClick={() => {
               setIsLogin(!isLogin);
               setMessage("");
@@ -102,7 +116,15 @@ const Auth = () => {
             {isLogin ? "Don't have an account? Signup" : "Already have an account? Login"}
           </Typography>
 
-          {message && <Typography sx={{ mt: 2, color: message.includes("successful") ? "green" : "red" }}>{message}</Typography>}
+          {message && (
+            <Typography
+              mt={2}
+              textAlign="center"
+              color={message.includes("successful") ? "green" : "red"}
+            >
+              {message}
+            </Typography>
+          )}
         </CardContent>
       </Card>
     </Box>
