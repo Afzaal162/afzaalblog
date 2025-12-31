@@ -36,7 +36,7 @@ const Profile = () => {
         setUser(userRes.data);
 
         // Fetch user blogs
-        const blogsRes = await axios.get(`${API_URL}/users/my-blogs`, {
+        const blogsRes = await axios.get(`${API_URL}/api/users/my-blogs`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setBlogs(blogsRes.data);
