@@ -1,36 +1,43 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, TextField, Button, ButtonGroup, Stack } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const categories = ["ALL", "WEBDEV", "APPDEV", "IOS DEV", "AI&ML"];
 
-const Header = ({ search, setSearch }) => {
+const Header = ({ search, setSearch, category, setCategory }) => {
   const navigate = useNavigate();
-  const [category, setCategory] = useState("ALL");
+  const location = useLocation();
+
+  // Sync category from URL if needed
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const urlCategory = params.get("category") || "ALL";
+    setCategory(urlCategory);
+  }, [location.search, setCategory]);
 
   const handleCategoryClick = (cat) => {
     setCategory(cat);
+    const query = search.trim();
     if (cat === "ALL") {
-      navigate("/"); // All blogs
+      navigate(`/?${query ? `search=${encodeURIComponent(query)}` : ""}`);
     } else {
-      navigate(`/category/${cat}`); // Specific category
+      navigate(
+        `/?category=${encodeURIComponent(cat)}${query ? `&search=${encodeURIComponent(query)}` : ""}`
+      );
     }
   };
 
   const handleSearch = () => {
     const query = search.trim();
-    if (query) {
-      // Navigate to Home with search query param
-      navigate(`/?search=${encodeURIComponent(query)}${category !== "ALL" ? `&category=${category}` : ""}`);
+    if (category === "ALL") {
+      navigate(`/?${query ? `search=${encodeURIComponent(query)}` : ""}`);
     } else {
-      // If empty search, just stay on current category
-      if (category === "ALL") navigate("/");
-      else navigate(`/category/${category}`);
+      navigate(`/?category=${encodeURIComponent(category)}${query ? `&search=${encodeURIComponent(query)}` : ""}`);
     }
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === "Enter") handleSearch(); // Search on Enter
+    if (e.key === "Enter") handleSearch();
   };
 
   return (
