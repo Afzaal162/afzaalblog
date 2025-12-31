@@ -30,7 +30,7 @@ const Profile = () => {
     const fetchProfile = async () => {
       try {
         // Fetch user profile
-        const userRes = await axios.get(`${API_URL}/users/profile`, {
+        const userRes = await axios.get(`${API_URL}/api/users/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUser(userRes.data);
