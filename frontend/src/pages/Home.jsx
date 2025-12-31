@@ -21,14 +21,15 @@ const Home = () => {
     setSearch(q);
   }, [location.search]);
 
-  // Fetch blogs based on search or category
+  // Fetch blogs
   useEffect(() => {
     const fetchBlogs = async () => {
       setLoading(true);
       try {
-        let url = `${process.env.REACT_APP_API_URL}/blogs`;
+        const url = `${process.env.REACT_APP_API_URL}/api/blogs`;
+
         const params = {};
-        if (category && category !== "ALL") params.category = category;
+        if (category !== "ALL") params.category = category;
         if (search) params.search = search;
 
         const res = await axios.get(url, { params });
@@ -45,13 +46,21 @@ const Home = () => {
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
-      {/* Header with search and categories */}
-      <Header search={search} setSearch={setSearch} category={category} setCategory={setCategory} />
+      <Header
+        search={search}
+        setSearch={setSearch}
+        category={category}
+        setCategory={setCategory}
+      />
 
       {loading ? (
-        <Typography sx={{ textAlign: "center", mt: 5 }}>Loading blogs...</Typography>
+        <Typography sx={{ textAlign: "center", mt: 5 }}>
+          Loading blogs...
+        </Typography>
       ) : blogs.length === 0 ? (
-        <Typography sx={{ textAlign: "center", mt: 5 }}>No blogs found.</Typography>
+        <Typography sx={{ textAlign: "center", mt: 5 }}>
+          No blogs found.
+        </Typography>
       ) : (
         <Grid container spacing={3}>
           {blogs.map((blog) => (
