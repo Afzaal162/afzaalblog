@@ -18,7 +18,7 @@ const BlogPage = () => {
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const res = await axios.get(`${API_URL}/blogs/${id}`);
+        const res = await axios.get(`${API_URL}/api/blogs/${id}`);
         setBlog(res.data);
 
         const savedComments = JSON.parse(localStorage.getItem(`comments_${id}`)) || [];
