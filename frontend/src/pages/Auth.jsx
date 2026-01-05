@@ -116,4 +116,4 @@ const Auth = () => {
     </Box>
   );
 };
-export default Auth; check out above login page. now look that my auth code. Do not touch even one line of logic of backend or logic. Just make style like this and like when user register
+export default Auth;
