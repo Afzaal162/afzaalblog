@@ -32,7 +32,7 @@ const AddBlog = () => {
     formData.append("title", title);
     formData.append("description", description);
     formData.append("category", category);
-    if (image) formData.append("image", image); // Must match backend field
+    if (image) formData.append("image", image);
 
     try {
       setLoading(true);
@@ -64,8 +64,24 @@ const AddBlog = () => {
   };
 
   return (
-    <Box sx={{ maxWidth: 600, mx: "auto", py: 4 }}>
-      <Typography variant="h4" gutterBottom>
+    <Box
+      sx={{
+        maxWidth: 600,
+        mx: "auto",
+        py: 4,
+        px: 2,
+        background: "rgba(30,30,30,0.85)", // dark glass background
+        backdropFilter: "blur(12px)",
+        borderRadius: 3,
+        boxShadow: "0 5px 15px rgba(0,0,0,0.3)",
+        color: "#fff",
+      }}
+    >
+      <Typography
+        variant="h4"
+        gutterBottom
+        sx={{ textAlign: "center", mb: 3, fontWeight: "bold" }}
+      >
         Add Blog
       </Typography>
 
@@ -75,6 +91,15 @@ const AddBlog = () => {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
+          sx={{
+            input: { color: "#fff" },
+            label: { color: "#ccc" },
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": { borderColor: "#555" },
+              "&:hover fieldset": { borderColor: "#667eea" },
+              "&.Mui-focused fieldset": { borderColor: "#667eea" },
+            },
+          }}
         />
 
         <TextField
@@ -84,6 +109,15 @@ const AddBlog = () => {
           multiline
           rows={4}
           required
+          sx={{
+            input: { color: "#fff" },
+            label: { color: "#ccc" },
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": { borderColor: "#555" },
+              "&:hover fieldset": { borderColor: "#667eea" },
+              "&.Mui-focused fieldset": { borderColor: "#667eea" },
+            },
+          }}
         />
 
         <TextField
@@ -92,6 +126,15 @@ const AddBlog = () => {
           value={category}
           onChange={(e) => setCategory(e.target.value)}
           required
+          sx={{
+            input: { color: "#fff" },
+            label: { color: "#ccc" },
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": { borderColor: "#555" },
+              "&:hover fieldset": { borderColor: "#667eea" },
+              "&.Mui-focused fieldset": { borderColor: "#667eea" },
+            },
+          }}
         >
           {categories.map((cat) => (
             <MenuItem key={cat} value={cat}>
@@ -100,7 +143,14 @@ const AddBlog = () => {
           ))}
         </TextField>
 
-        <Button variant="contained" component="label">
+        <Button
+          variant="contained"
+          component="label"
+          sx={{
+            backgroundColor: "#667eea",
+            "&:hover": { backgroundColor: "#5566cc" },
+          }}
+        >
           {image ? "Change Image" : "Upload Image"}
           <input
             type="file"
@@ -111,23 +161,31 @@ const AddBlog = () => {
         </Button>
 
         {image && (
-          <Box sx={{ mt: 1 }}>
+          <Box sx={{ mt: 1, textAlign: "center" }}>
             <Typography>Selected: {image.name}</Typography>
             <img
               src={URL.createObjectURL(image)}
               alt="preview"
-              style={{ width: "100%", marginTop: 10 }}
+              style={{ width: "100%", marginTop: 10, borderRadius: 8 }}
             />
           </Box>
         )}
 
-        <Button type="submit" variant="contained" disabled={loading}>
+        <Button
+          type="submit"
+          variant="contained"
+          disabled={loading}
+          sx={{
+            backgroundColor: "#667eea",
+            "&:hover": { backgroundColor: "#5566cc" },
+          }}
+        >
           {loading ? "Adding..." : "Add Blog"}
         </Button>
 
         {message && (
           <Typography
-            sx={{ mt: 2 }}
+            sx={{ mt: 2, textAlign: "center" }}
             color={message.includes("successfully") ? "green" : "error"}
           >
             {message}
