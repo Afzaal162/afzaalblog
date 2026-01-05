@@ -46,9 +46,28 @@ const Navbar = () => {
   const linksToRender = isLoggedIn ? authLinks : guestLinks;
 
   return (
-    <AppBar position="static">
+    <AppBar
+      position="static"
+      sx={{
+        background: "rgba(255,255,255,0.25)",
+        backdropFilter: "blur(12px)",
+        boxShadow: "0 5px 15px rgba(0,0,0,0.1)",
+      }}
+    >
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Typography variant="h6">AfzaalBlog</Typography>
+        <Typography
+          variant="h6"
+          sx={{
+            fontWeight: "bold",
+            color: "#333",
+            cursor: "pointer",
+            "&:hover": { color: "#667eea" },
+            transition: "0.3s",
+          }}
+          onClick={() => navigate("/")}
+        >
+          AfzaalBlog
+        </Typography>
 
         {/* Desktop Links */}
         <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}>
@@ -58,6 +77,15 @@ const Navbar = () => {
               color="inherit"
               component={Link}
               to={link.path}
+              sx={{
+                mx: 1,
+                fontWeight: "bold",
+                "&:hover": {
+                  color: "#667eea",
+                  transform: "translateY(-2px)",
+                },
+                transition: "0.3s",
+              }}
             >
               {link.label}
             </Button>
@@ -69,7 +97,11 @@ const Navbar = () => {
               color="inherit"
               component={Link}
               to="/profile"
-              sx={{ ml: 1 }}
+              sx={{
+                ml: 1,
+                "&:hover": { transform: "scale(1.1)" },
+                transition: "0.3s",
+              }}
             >
               <AccountCircleIcon fontSize="large" />
             </IconButton>
@@ -77,7 +109,16 @@ const Navbar = () => {
 
           {/* Logout Button */}
           {isLoggedIn && (
-            <Button color="inherit" onClick={handleLogout}>
+            <Button
+              color="inherit"
+              onClick={handleLogout}
+              sx={{
+                ml: 1,
+                fontWeight: "bold",
+                "&:hover": { color: "#e52e71" },
+                transition: "0.3s",
+              }}
+            >
               Logout
             </Button>
           )}
@@ -89,13 +130,28 @@ const Navbar = () => {
             <MenuIcon />
           </IconButton>
 
-          <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+          <Menu
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+          >
             {linksToRender.map((link) => (
               <MenuItem
                 key={link.label}
                 component={Link}
                 to={link.path}
                 onClick={handleClose}
+                sx={{
+                  "&:hover": { background: "rgba(102,126,234,0.1)" },
+                }}
               >
                 {link.label}
               </MenuItem>
@@ -106,13 +162,17 @@ const Navbar = () => {
                 component={Link}
                 to="/profile"
                 onClick={handleClose}
+                sx={{ "&:hover": { background: "rgba(102,126,234,0.1)" } }}
               >
                 Profile
               </MenuItem>
             )}
 
             {isLoggedIn && (
-              <MenuItem onClick={handleLogout}>
+              <MenuItem
+                onClick={handleLogout}
+                sx={{ "&:hover": { background: "rgba(229,46,113,0.1)" } }}
+              >
                 Logout
               </MenuItem>
             )}
