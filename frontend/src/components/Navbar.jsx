@@ -55,6 +55,7 @@ const Navbar = () => {
       }}
     >
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+        {/* Logo */}
         <Typography
           variant="h6"
           sx={{
@@ -74,14 +75,14 @@ const Navbar = () => {
           {linksToRender.map((link) => (
             <Button
               key={link.label}
-              color="inherit"
               component={Link}
               to={link.path}
               sx={{
                 mx: 1,
                 fontWeight: "bold",
+                color: "black", // ✅ Font color black
                 "&:hover": {
-                  color: "#667eea",
+                  color: "black", // ✅ Keep black on hover
                   transform: "translateY(-2px)",
                 },
                 transition: "0.3s",
@@ -91,14 +92,14 @@ const Navbar = () => {
             </Button>
           ))}
 
-          {/* 👤 Profile Icon */}
+          {/* Profile Icon */}
           {isLoggedIn && (
             <IconButton
-              color="inherit"
               component={Link}
               to="/profile"
               sx={{
                 ml: 1,
+                color: "black", // ✅ Black icon color
                 "&:hover": { transform: "scale(1.1)" },
                 transition: "0.3s",
               }}
@@ -107,14 +108,14 @@ const Navbar = () => {
             </IconButton>
           )}
 
-          {/* Logout Button */}
+          {/* Logout */}
           {isLoggedIn && (
             <Button
-              color="inherit"
               onClick={handleLogout}
               sx={{
                 ml: 1,
                 fontWeight: "bold",
+                color: "black", // ✅ Black font
                 "&:hover": { color: "#e52e71" },
                 transition: "0.3s",
               }}
@@ -127,7 +128,7 @@ const Navbar = () => {
         {/* Mobile Menu */}
         <Box sx={{ display: { xs: "flex", md: "none" } }}>
           <IconButton size="large" color="inherit" onClick={handleMenu}>
-            <MenuIcon />
+            <MenuIcon sx={{ color: "black" }} /> {/* ✅ Black menu icon */}
           </IconButton>
 
           <Menu
@@ -150,6 +151,7 @@ const Navbar = () => {
                 to={link.path}
                 onClick={handleClose}
                 sx={{
+                  color: "black", // ✅ Black font
                   "&:hover": { background: "rgba(102,126,234,0.1)" },
                 }}
               >
@@ -162,7 +164,10 @@ const Navbar = () => {
                 component={Link}
                 to="/profile"
                 onClick={handleClose}
-                sx={{ "&:hover": { background: "rgba(102,126,234,0.1)" } }}
+                sx={{
+                  color: "black",
+                  "&:hover": { background: "rgba(102,126,234,0.1)" },
+                }}
               >
                 Profile
               </MenuItem>
@@ -171,7 +176,10 @@ const Navbar = () => {
             {isLoggedIn && (
               <MenuItem
                 onClick={handleLogout}
-                sx={{ "&:hover": { background: "rgba(229,46,113,0.1)" } }}
+                sx={{
+                  color: "black",
+                  "&:hover": { background: "rgba(229,46,113,0.1)" },
+                }}
               >
                 Logout
               </MenuItem>
