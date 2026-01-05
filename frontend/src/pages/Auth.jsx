@@ -1,58 +1,81 @@
 import React, { useState, useContext } from "react";
-import { Box, Card, CardContent, TextField, Button, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  TextField,
+  Button,
+  Typography,
+} from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
+
   const API_URL = process.env.REACT_APP_API_URL;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
+
     try {
       let res;
+
       if (isLogin) {
-        res = await axios.post`${API_URL}/api/auth/login`, { email, password });
+        // ✅ LOGIN
+        res = await axios.post(
+          `${API_URL}/api/auth/login`,
+          { email, password }
+        );
+
         login(res.data.token);
         navigate("/");
       } else {
-        res = await axios.post`${API_URL}/api/auth/signup`, { name, email, password });
+        // ✅ SIGNUP
+        await axios.post(
+          `${API_URL}/api/auth/signup`,
+          { name, email, password }
+        );
+
         setIsLogin(true);
         setMessage("Signup successful. Please login.");
       }
+
+      // Clear fields
       setName("");
       setEmail("");
       setPassword("");
     } catch (err) {
-      setMessage(err.response?.data?.message || "Something went wrong");
+      setMessage(
+        err.response?.data?.message || "Something went wrong"
+      );
     }
   };
+
   return (
     <Box
       minHeight="100vh"
       display="flex"
       alignItems="center"
       justifyContent="center"
-      px={2} // ✅ horizontal padding for mobile
+      px={2}
       bgcolor="#f5f5f5"
     >
-      <Card
-        sx={{
-          width: "100%",
-          maxWidth: 400, // ✅ responsive instead of minWidth
-          p: 2,
-        }}
-      >
+      <Card sx={{ width: "100%", maxWidth: 400, p: 2 }}>
         <CardContent>
           <Typography variant="h5" textAlign="center" gutterBottom>
             {isLogin ? "Login" : "Signup"}
           </Typography>
+
           <form onSubmit={handleSubmit}>
             {!isLogin && (
               <TextField
@@ -64,6 +87,7 @@ const Auth = () => {
                 required
               />
             )}
+
             <TextField
               label="Email"
               type="email"
@@ -73,6 +97,7 @@ const Auth = () => {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
+
             <TextField
               label="Password"
               type="password"
@@ -82,6 +107,7 @@ const Auth = () => {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+
             <Button
               variant="contained"
               type="submit"
@@ -91,6 +117,7 @@ const Auth = () => {
               {isLogin ? "Login" : "Signup"}
             </Button>
           </form>
+
           <Typography
             mt={2}
             textAlign="center"
@@ -100,8 +127,11 @@ const Auth = () => {
               setMessage("");
             }}
           >
-            {isLogin ? "Don't have an account? Signup" : "Already have an account? Login"}
+            {isLogin
+              ? "Don't have an account? Signup"
+              : "Already have an account? Login"}
           </Typography>
+
           {message && (
             <Typography
               mt={2}
@@ -116,4 +146,5 @@ const Auth = () => {
     </Box>
   );
 };
+
 export default Auth;
