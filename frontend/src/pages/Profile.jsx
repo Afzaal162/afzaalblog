@@ -16,7 +16,6 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Use environment variable or fallback to localhost
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
   const token = localStorage.getItem("token");
 
@@ -29,13 +28,11 @@ const Profile = () => {
 
     const fetchProfile = async () => {
       try {
-        // Fetch user profile
         const userRes = await axios.get(`${API_URL}/api/users/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUser(userRes.data);
 
-        // Fetch user blogs
         const blogsRes = await axios.get(`${API_URL}/api/users/my-blogs`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -68,14 +65,28 @@ const Profile = () => {
 
   return (
     <Container maxWidth="md" sx={{ mt: 5, mb: 5 }}>
-      <Typography variant="h4" gutterBottom>
+      <Typography
+        variant="h4"
+        gutterBottom
+        sx={{ textAlign: "center", mb: 4, fontWeight: "bold", color: "#fff" }}
+      >
         My Profile
       </Typography>
 
       {/* User Info */}
-      <Card sx={{ mb: 4 }}>
+      <Card
+        sx={{
+          mb: 4,
+          background: "rgba(30,30,30,0.85)", // Dark glass card
+          backdropFilter: "blur(12px)",
+          boxShadow: "0 5px 15px rgba(0,0,0,0.3)",
+          color: "#fff",
+        }}
+      >
         <CardContent>
-          <Typography variant="h5">{user.name}</Typography>
+          <Typography variant="h5" sx={{ mb: 1 }}>
+            {user.name}
+          </Typography>
           <Typography variant="body1" sx={{ mb: 2 }}>
             <strong>Email:</strong> {user.email}
           </Typography>
@@ -84,11 +95,21 @@ const Profile = () => {
           {user.interests && user.interests.length > 0 ? (
             <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mt: 1 }}>
               {user.interests.map((topic, index) => (
-                <Chip key={index} label={topic} color="primary" sx={{ mb: 1 }} />
+                <Chip
+                  key={index}
+                  label={topic}
+                  color="primary"
+                  sx={{
+                    mb: 1,
+                    fontWeight: "bold",
+                    backgroundColor: "#667eea",
+                    color: "#fff",
+                  }}
+                />
               ))}
             </Stack>
           ) : (
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" color="#ccc">
               No topics added yet.
             </Typography>
           )}
@@ -96,17 +117,32 @@ const Profile = () => {
       </Card>
 
       {/* User Blogs */}
-      <Typography variant="h5" gutterBottom>
+      <Typography
+        variant="h5"
+        gutterBottom
+        sx={{ mb: 2, fontWeight: "bold", color: "#fff" }}
+      >
         My Blogs
       </Typography>
+
       {blogs.length === 0 ? (
-        <Typography>No blogs added yet.</Typography>
+        <Typography color="#ccc">No blogs added yet.</Typography>
       ) : (
         blogs.map((blog) => (
-          <Card key={blog._id} sx={{ mb: 2 }}>
+          <Card
+            key={blog._id}
+            sx={{
+              mb: 2,
+              background: "rgba(30,30,30,0.75)",
+              backdropFilter: "blur(8px)",
+              color: "#fff",
+              transition: "0.3s",
+              "&:hover": { transform: "translateY(-2px)", boxShadow: "0 8px 20px rgba(0,0,0,0.4)" },
+            }}
+          >
             <CardContent>
               <Typography variant="h6">{blog.title}</Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" color="#ccc">
                 {blog.subTitle || blog.description}
               </Typography>
             </CardContent>
