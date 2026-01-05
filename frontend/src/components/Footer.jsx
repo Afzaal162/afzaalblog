@@ -14,7 +14,7 @@ const Footer = () => {
         px: 2,
         borderRadius: 3,
         textAlign: "center",
-        background: "rgba(255,255,255,0.15)",
+        background: "rgba(25,25,25,0.85)", // Dark glassmorphism background
         backdropFilter: "blur(12px)",
         boxShadow: "0 5px 15px rgba(0,0,0,0.1)",
         color: "#fff",
