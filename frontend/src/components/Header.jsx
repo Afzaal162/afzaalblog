@@ -58,7 +58,14 @@ const Header = ({ search, setSearch, category, setCategory }) => {
       }}
     >
       {/* Search Input & Button */}
-      <Box sx={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 1 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          flexWrap: "wrap",
+          gap: 1,
+        }}
+      >
         <TextField
           label="Search blogs..."
           variant="outlined"
@@ -76,6 +83,7 @@ const Header = ({ search, setSearch, category, setCategory }) => {
             },
           }}
         />
+
         <Button
           variant="contained"
           onClick={handleSearch}
@@ -84,20 +92,35 @@ const Header = ({ search, setSearch, category, setCategory }) => {
             color: "#fff",
             fontWeight: "bold",
             borderRadius: 2,
+            transition: "0.3s",
             "&:hover": {
               background: "linear-gradient(90deg, #764ba2, #667eea)",
               transform: "translateY(-2px)",
             },
-            transition: "0.3s",
           }}
         >
           Search
         </Button>
       </Box>
 
-      {/* Category Buttons */}
-      <Stack direction="row" justifyContent="center" sx={{ mt: 3 }}>
-        <ButtonGroup variant="outlined" aria-label="categories">
+      {/* Responsive Category Section */}
+      <Box
+        sx={{
+          mt: 3,
+          display: "flex",
+          justifyContent: "center",
+          overflowX: { xs: "auto", sm: "visible" },
+          pb: 1,
+        }}
+      >
+        <ButtonGroup
+          variant="outlined"
+          aria-label="categories"
+          sx={{
+            flexWrap: { xs: "nowrap", sm: "wrap" },
+            gap: 1,
+          }}
+        >
           {categories.map((cat) => (
             <Button
               key={cat}
@@ -107,22 +130,24 @@ const Header = ({ search, setSearch, category, setCategory }) => {
                 fontWeight: "bold",
                 borderRadius: 2,
                 px: 2,
-                mx: 0.5,
+                whiteSpace: "nowrap",
+                transition: "0.3s",
+                background:
+                  cat === category
+                    ? "linear-gradient(90deg, #667eea, #764ba2)"
+                    : "transparent",
+                color: cat === category ? "#fff" : "inherit",
                 "&:hover": {
                   transform: "translateY(-2px)",
                   boxShadow: "0 6px 15px rgba(0,0,0,0.1)",
                 },
-                transition: "0.3s",
-                background:
-                  cat === category ? "linear-gradient(90deg, #667eea, #764ba2)" : "",
-                color: cat === category ? "#fff" : "inherit",
               }}
             >
               {cat}
             </Button>
           ))}
         </ButtonGroup>
-      </Stack>
+      </Box>
     </Box>
   );
 };
