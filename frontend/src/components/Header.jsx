@@ -144,27 +144,6 @@ const Header = () => {
                     {cat.description}
                   </Typography>
                 </Box>
-
-                <Button
-                  onClick={() => handleExplore(cat.key)}
-                  variant="contained"
-                  sx={{
-                    alignSelf: "flex-start",
-                    background: "#6366f1",
-                    fontWeight: "bold",
-                    px: 4,
-                    py: 1.2,
-                    borderRadius: 3,
-                    textTransform: "none",
-                    "&:hover": {
-                      background: "#4f46e5",
-                      transform: "translateY(-2px)",
-                    },
-                    transition: "0.3s",
-                  }}
-                >
-                  Explore →
-                </Button>
               </Box>
             </Box>
           ))}
