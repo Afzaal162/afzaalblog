@@ -1,6 +1,5 @@
 import React from "react";
 import { Box, Typography, Button } from "@mui/material";
-import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
 const categories = [
@@ -30,31 +29,26 @@ const Header = () => {
         overflow: "hidden",
       }}
     >
-      {/* Heading */}
       <Typography
         variant="h4"
         fontWeight="bold"
         textAlign="center"
         mb={3}
-        sx={{ color: "#1f2933" }}
       >
         Explore Trending Categories 🚀
       </Typography>
 
-      {/* Carousel Container */}
-      <Box sx={{ overflow: "hidden", position: "relative" }}>
-        <motion.div
-          style={{
+      {/* Carousel */}
+      <Box sx={{ overflow: "hidden" }}>
+        <Box
+          sx={{
             display: "flex",
-            gap: "20px",
-          }}
-          animate={{
-            x: ["0%", "-100%"],
-          }}
-          transition={{
-            repeat: Infinity,
-            duration: 25,
-            ease: "linear",
+            gap: 2,
+            animation: "scroll 25s linear infinite",
+            "@keyframes scroll": {
+              "0%": { transform: "translateX(0)" },
+              "100%": { transform: "translateX(-50%)" },
+            },
           }}
         >
           {[...categories, ...categories].map((cat, index) => (
@@ -71,13 +65,14 @@ const Header = () => {
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
+                flexShrink: 0,
               }}
             >
-              <Typography variant="h5" fontWeight="bold" mb={1}>
+              <Typography variant="h5" fontWeight="bold">
                 {cat.label}
               </Typography>
 
-              <Typography variant="body2" sx={{ opacity: 0.9 }}>
+              <Typography variant="body2" sx={{ opacity: 0.9, mt: 1 }}>
                 Discover latest articles, tutorials, and insights related to{" "}
                 {cat.label}.
               </Typography>
@@ -101,7 +96,7 @@ const Header = () => {
               </Button>
             </Box>
           ))}
-        </motion.div>
+        </Box>
       </Box>
     </Box>
   );
