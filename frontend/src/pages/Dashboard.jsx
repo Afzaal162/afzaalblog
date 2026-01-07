@@ -9,6 +9,7 @@ import {
   CardContent,
   CardActions,
   Fade,
+  Container,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
@@ -60,112 +61,148 @@ const Dashboard = () => {
   return (
     <Box
       sx={{
-        maxWidth: 1000,
-        mx: "auto",
-        py: 6,
-        background:
-          "linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%)",
         minHeight: "100vh",
+        py: 8,
+        px: 2,
+        background: "linear-gradient(135deg, #1f1f1f 0%, #121212 100%)",
+        display: "flex",
+        justifyContent: "center",
       }}
     >
-      {/* Header */}
-      <Stack
-        direction={{ xs: "column", sm: "row" }}
-        justifyContent="space-between"
-        alignItems={{ xs: "flex-start", sm: "center" }}
-        mb={4}
-        gap={2}
-      >
-        <Typography variant="h4" fontWeight="bold">
-          Dashboard
-        </Typography>
-        <Button
-          variant="contained"
-          onClick={() => navigate("/add-blog")}
-          sx={{
-            background: "linear-gradient(90deg, #ff8a00, #e52e71)",
-            color: "#fff",
-            fontWeight: "bold",
-            "&:hover": {
-              transform: "translateY(-2px)",
-              boxShadow: "0 8px 20px rgba(0,0,0,0.2)",
-            },
-            transition: "0.3s",
-          }}
+      <Container maxWidth="md">
+        {/* Header */}
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          justifyContent="space-between"
+          alignItems={{ xs: "flex-start", sm: "center" }}
+          mb={5}
+          gap={2}
         >
-          Add Blog
-        </Button>
-      </Stack>
-
-      {/* Content */}
-      {loading ? (
-        <Typography
-          sx={{ textAlign: "center", mt: 6, fontSize: "1.2rem", color: "text.secondary" }}
-        >
-          Loading blogs...
-        </Typography>
-      ) : blogs.length === 0 ? (
-        <Typography
-          sx={{ textAlign: "center", mt: 6, fontSize: "1.2rem", color: "text.secondary" }}
-        >
-          No blogs found.
-        </Typography>
-      ) : (
-        <Stack spacing={3}>
-          {blogs.map((blog, index) => (
-            <Fade in timeout={400 + index * 150} key={blog._id}>
-              <Card
-                sx={{
-                  backdropFilter: "blur(10px)",
-                  background: "rgba(255,255,255,0.25)",
-                  borderRadius: 3,
-                  boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
-                  transition: "0.3s",
-                  "&:hover": {
-                    transform: "translateY(-5px)",
-                    boxShadow: "0 20px 40px rgba(0,0,0,0.2)",
-                  },
-                }}
-              >
-                <CardContent>
-                  <Typography variant="h6" fontWeight="bold" gutterBottom>
-                    {blog.title}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" mb={1}>
-                    {blog.description.substring(0, 120)}...
-                  </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    Category: {blog.category} | Author: {blog.author?.name || "Unknown"}
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button
-                    size="small"
-                    sx={{
-                      color: "#fff",
-                      background: "linear-gradient(90deg, #667eea, #764ba2)",
-                      "&:hover": {
-                        background: "linear-gradient(90deg, #764ba2, #667eea)",
-                      },
-                    }}
-                    onClick={() => navigate(`/edit-blog/${blog._id}`)}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    size="small"
-                    color="error"
-                    sx={{ ml: 1 }}
-                    onClick={() => handleDelete(blog._id)}
-                  >
-                    Delete
-                  </Button>
-                </CardActions>
-              </Card>
-            </Fade>
-          ))}
+          <Typography
+            variant="h3"
+            fontWeight="bold"
+            sx={{ color: "#fff", letterSpacing: 1 }}
+          >
+            Dashboard
+          </Typography>
+          <Button
+            variant="contained"
+            onClick={() => navigate("/add-blog")}
+            sx={{
+              background: "linear-gradient(90deg, #667eea, #764ba2)",
+              color: "#fff",
+              fontWeight: "bold",
+              py: 1.2,
+              px: 3,
+              "&:hover": {
+                background: "linear-gradient(90deg, #764ba2, #667eea)",
+                transform: "translateY(-2px)",
+                boxShadow: "0 8px 20px rgba(0,0,0,0.3)",
+              },
+              transition: "0.3s",
+            }}
+          >
+            Add Blog
+          </Button>
         </Stack>
-      )}
+
+        {/* Content */}
+        {loading ? (
+          <Typography
+            sx={{
+              textAlign: "center",
+              mt: 6,
+              fontSize: "1.2rem",
+              color: "#ccc",
+            }}
+          >
+            Loading blogs...
+          </Typography>
+        ) : blogs.length === 0 ? (
+          <Typography
+            sx={{
+              textAlign: "center",
+              mt: 6,
+              fontSize: "1.2rem",
+              color: "#ccc",
+            }}
+          >
+            No blogs found.
+          </Typography>
+        ) : (
+          <Stack spacing={4}>
+            {blogs.map((blog, index) => (
+              <Fade in timeout={400 + index * 150} key={blog._id}>
+                <Card
+                  sx={{
+                    backdropFilter: "blur(14px)",
+                    background: "rgba(50,50,50,0.75)",
+                    borderRadius: 3,
+                    boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
+                    transition: "0.3s",
+                    "&:hover": {
+                      transform: "translateY(-5px)",
+                      boxShadow: "0 20px 40px rgba(0,0,0,0.5)",
+                    },
+                  }}
+                >
+                  <CardContent>
+                    <Typography
+                      variant="h5"
+                      fontWeight="bold"
+                      gutterBottom
+                      sx={{ color: "#fff" }}
+                    >
+                      {blog.title}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="#ccc"
+                      mb={1}
+                    >
+                      {blog.description.substring(0, 150)}...
+                    </Typography>
+                    <Typography
+                      variant="caption"
+                      color="#aaa"
+                    >
+                      Category: {blog.category} | Author:{" "}
+                      {blog.author?.name || "Unknown"}
+                    </Typography>
+                  </CardContent>
+                  <CardActions sx={{ px: 2, pb: 2 }}>
+                    <Button
+                      size="small"
+                      sx={{
+                        color: "#fff",
+                        background: "linear-gradient(90deg, #667eea, #764ba2)",
+                        "&:hover": {
+                          background: "linear-gradient(90deg, #764ba2, #667eea)",
+                        },
+                        fontWeight: "bold",
+                      }}
+                      onClick={() => navigate(`/edit-blog/${blog._id}`)}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      size="small"
+                      color="error"
+                      sx={{
+                        ml: 1,
+                        fontWeight: "bold",
+                      }}
+                      onClick={() => handleDelete(blog._id)}
+                    >
+                      Delete
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Fade>
+            ))}
+          </Stack>
+        )}
+      </Container>
     </Box>
   );
 };
