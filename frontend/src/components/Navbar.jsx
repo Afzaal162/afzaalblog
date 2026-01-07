@@ -21,13 +21,8 @@ const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const handleMenu = (event) => setAnchorEl(event.currentTarget);
+  const handleClose = () => setAnchorEl(null);
 
   const handleLogout = () => {
     logout();
@@ -47,25 +42,27 @@ const Navbar = () => {
 
   return (
     <AppBar
-      position="static"
+      position="sticky"
+      elevation={0}
       sx={{
-        background: "rgba(255,255,255,0.25)",
-        backdropFilter: "blur(12px)",
-        boxShadow: "0 5px 15px rgba(0,0,0,0.1)",
+        background: "rgba(255,255,255,0.35)",
+        backdropFilter: "blur(14px)",
+        borderBottom: "1px solid rgba(255,255,255,0.3)",
       }}
     >
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         {/* Logo */}
         <Typography
           variant="h6"
+          onClick={() => navigate("/")}
           sx={{
-            fontWeight: "bold",
-            color: "#333",
+            fontWeight: 800,
+            letterSpacing: 0.5,
             cursor: "pointer",
+            color: "#111",
             "&:hover": { color: "#667eea" },
             transition: "0.3s",
           }}
-          onClick={() => navigate("/")}
         >
           AfzaalBlog
         </Typography>
@@ -79,13 +76,14 @@ const Navbar = () => {
               to={link.path}
               sx={{
                 mx: 1,
-                fontWeight: "bold",
-                color: "black", // ✅ Font color black
+                fontWeight: 600,
+                color: "#000",
+                textTransform: "none",
                 "&:hover": {
-                  color: "black", // ✅ Keep black on hover
+                  color: "#000",
                   transform: "translateY(-2px)",
                 },
-                transition: "0.3s",
+                transition: "0.25s",
               }}
             >
               {link.label}
@@ -99,9 +97,9 @@ const Navbar = () => {
               to="/profile"
               sx={{
                 ml: 1,
-                color: "black", // ✅ Black icon color
+                color: "#000",
                 "&:hover": { transform: "scale(1.1)" },
-                transition: "0.3s",
+                transition: "0.25s",
               }}
             >
               <AccountCircleIcon fontSize="large" />
@@ -114,10 +112,11 @@ const Navbar = () => {
               onClick={handleLogout}
               sx={{
                 ml: 1,
-                fontWeight: "bold",
-                color: "black", // ✅ Black font
-                "&:hover": { color: "#e52e71" },
-                transition: "0.3s",
+                fontWeight: 600,
+                color: "#000",
+                textTransform: "none",
+                "&:hover": { color: "#e11d48" },
+                transition: "0.25s",
               }}
             >
               Logout
@@ -127,21 +126,20 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         <Box sx={{ display: { xs: "flex", md: "none" } }}>
-          <IconButton size="large" color="inherit" onClick={handleMenu}>
-            <MenuIcon sx={{ color: "black" }} /> {/* ✅ Black menu icon */}
+          <IconButton onClick={handleMenu}>
+            <MenuIcon sx={{ color: "#000" }} />
           </IconButton>
 
           <Menu
             anchorEl={anchorEl}
             open={open}
             onClose={handleClose}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "right",
-            }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
+            PaperProps={{
+              sx: {
+                borderRadius: 2,
+                mt: 1,
+                minWidth: 160,
+              },
             }}
           >
             {linksToRender.map((link) => (
@@ -151,8 +149,11 @@ const Navbar = () => {
                 to={link.path}
                 onClick={handleClose}
                 sx={{
-                  color: "black", // ✅ Black font
-                  "&:hover": { background: "rgba(102,126,234,0.1)" },
+                  fontWeight: 500,
+                  color: "#000",
+                  "&:hover": {
+                    background: "rgba(102,126,234,0.1)",
+                  },
                 }}
               >
                 {link.label}
@@ -165,8 +166,11 @@ const Navbar = () => {
                 to="/profile"
                 onClick={handleClose}
                 sx={{
-                  color: "black",
-                  "&:hover": { background: "rgba(102,126,234,0.1)" },
+                  fontWeight: 500,
+                  color: "#000",
+                  "&:hover": {
+                    background: "rgba(102,126,234,0.1)",
+                  },
                 }}
               >
                 Profile
@@ -177,8 +181,11 @@ const Navbar = () => {
               <MenuItem
                 onClick={handleLogout}
                 sx={{
-                  color: "black",
-                  "&:hover": { background: "rgba(229,46,113,0.1)" },
+                  fontWeight: 500,
+                  color: "#000",
+                  "&:hover": {
+                    background: "rgba(225,29,72,0.12)",
+                  },
                 }}
               >
                 Logout
