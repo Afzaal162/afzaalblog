@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Box, TextField, Button, Typography, Stack, MenuItem } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Button,
+  Typography,
+  Stack,
+  MenuItem,
+  Container,
+} from "@mui/material";
 
 const categories = ["ALL", "WEBDEV", "APPDEV", "IOS DEV", "AI&ML"];
 
@@ -16,7 +24,6 @@ const AddBlog = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!title || !description || !category) {
       setMessage("Please fill all required fields.");
       return;
@@ -46,18 +53,15 @@ const AddBlog = () => {
       });
 
       setMessage("Blog added successfully!");
-      console.log("Blog added response:", res.data);
+      console.log(res.data);
 
-      // Reset form
       setTitle("");
       setDescription("");
       setCategory("");
       setImage(null);
     } catch (err) {
-      console.error("Error adding blog:", err.response || err);
-      setMessage(
-        err.response?.data?.message || "Failed to add blog. Check console."
-      );
+      console.error(err.response || err);
+      setMessage(err.response?.data?.message || "Failed to add blog.");
     } finally {
       setLoading(false);
     }
@@ -66,132 +70,162 @@ const AddBlog = () => {
   return (
     <Box
       sx={{
-        maxWidth: 600,
-        mx: "auto",
-        py: 4,
+        minHeight: "100vh",
+        py: 8,
         px: 2,
-        background: "rgba(30,30,30,0.85)", // dark glass background
-        backdropFilter: "blur(12px)",
-        borderRadius: 3,
-        boxShadow: "0 5px 15px rgba(0,0,0,0.3)",
-        color: "#fff",
+        background:
+          "linear-gradient(135deg, #1f1f1f 0%, #121212 100%)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
-      <Typography
-        variant="h4"
-        gutterBottom
-        sx={{ textAlign: "center", mb: 3, fontWeight: "bold" }}
+      <Container
+        maxWidth="sm"
+        sx={{
+          py: 6,
+          px: 4,
+          borderRadius: 4,
+          background: "rgba(30,30,30,0.85)",
+          backdropFilter: "blur(14px)",
+          boxShadow: "0 20px 50px rgba(0,0,0,0.4)",
+          color: "#fff",
+          transition: "0.3s",
+          "&:hover": {
+            transform: "translateY(-3px)",
+            boxShadow: "0 25px 60px rgba(0,0,0,0.5)",
+          },
+        }}
       >
-        Add Blog
-      </Typography>
-
-      <Stack spacing={2} component="form" onSubmit={handleSubmit}>
-        <TextField
-          label="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
+        <Typography
+          variant="h3"
           sx={{
-            input: { color: "#fff" },
-            label: { color: "#ccc" },
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": { borderColor: "#555" },
-              "&:hover fieldset": { borderColor: "#667eea" },
-              "&.Mui-focused fieldset": { borderColor: "#667eea" },
-            },
-          }}
-        />
-
-        <TextField
-          label="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          multiline
-          rows={4}
-          required
-          sx={{
-            input: { color: "#fff" },
-            label: { color: "#ccc" },
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": { borderColor: "#555" },
-              "&:hover fieldset": { borderColor: "#667eea" },
-              "&.Mui-focused fieldset": { borderColor: "#667eea" },
-            },
-          }}
-        />
-
-        <TextField
-          select
-          label="Category"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          required
-          sx={{
-            input: { color: "#fff" },
-            label: { color: "#ccc" },
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": { borderColor: "#555" },
-              "&:hover fieldset": { borderColor: "#667eea" },
-              "&.Mui-focused fieldset": { borderColor: "#667eea" },
-            },
+            textAlign: "center",
+            fontWeight: "bold",
+            mb: 4,
+            letterSpacing: 1,
           }}
         >
-          {categories.map((cat) => (
-            <MenuItem key={cat} value={cat}>
-              {cat}
-            </MenuItem>
-          ))}
-        </TextField>
+          Add New Blog
+        </Typography>
 
-        <Button
-          variant="contained"
-          component="label"
-          sx={{
-            backgroundColor: "#667eea",
-            "&:hover": { backgroundColor: "#5566cc" },
-          }}
-        >
-          {image ? "Change Image" : "Upload Image"}
-          <input
-            type="file"
-            hidden
-            accept="image/*"
-            onChange={(e) => setImage(e.target.files[0])}
+        <Stack spacing={3} component="form" onSubmit={handleSubmit}>
+          <TextField
+            label="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+            fullWidth
+            sx={{
+              input: { color: "#fff" },
+              label: { color: "#aaa" },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: "#555" },
+                "&:hover fieldset": { borderColor: "#667eea" },
+                "&.Mui-focused fieldset": { borderColor: "#667eea" },
+              },
+            }}
           />
-        </Button>
 
-        {image && (
-          <Box sx={{ mt: 1, textAlign: "center" }}>
-            <Typography>Selected: {image.name}</Typography>
-            <img
-              src={URL.createObjectURL(image)}
-              alt="preview"
-              style={{ width: "100%", marginTop: 10, borderRadius: 8 }}
-            />
-          </Box>
-        )}
+          <TextField
+            label="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            multiline
+            rows={5}
+            required
+            fullWidth
+            sx={{
+              input: { color: "#fff" },
+              label: { color: "#aaa" },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: "#555" },
+                "&:hover fieldset": { borderColor: "#667eea" },
+                "&.Mui-focused fieldset": { borderColor: "#667eea" },
+              },
+            }}
+          />
 
-        <Button
-          type="submit"
-          variant="contained"
-          disabled={loading}
-          sx={{
-            backgroundColor: "#667eea",
-            "&:hover": { backgroundColor: "#5566cc" },
-          }}
-        >
-          {loading ? "Adding..." : "Add Blog"}
-        </Button>
-
-        {message && (
-          <Typography
-            sx={{ mt: 2, textAlign: "center" }}
-            color={message.includes("successfully") ? "green" : "error"}
+          <TextField
+            select
+            label="Category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            required
+            fullWidth
+            sx={{
+              input: { color: "#fff" },
+              label: { color: "#aaa" },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: "#555" },
+                "&:hover fieldset": { borderColor: "#667eea" },
+                "&.Mui-focused fieldset": { borderColor: "#667eea" },
+              },
+            }}
           >
-            {message}
-          </Typography>
-        )}
-      </Stack>
+            {categories.map((cat) => (
+              <MenuItem key={cat} value={cat}>
+                {cat}
+              </MenuItem>
+            ))}
+          </TextField>
+
+          <Button
+            variant="contained"
+            component="label"
+            fullWidth
+            sx={{
+              background: "linear-gradient(90deg, #667eea, #764ba2)",
+              fontWeight: "bold",
+              py: 1.5,
+              "&:hover": { background: "linear-gradient(90deg, #764ba2, #667eea)" },
+            }}
+          >
+            {image ? "Change Image" : "Upload Image"}
+            <input
+              type="file"
+              hidden
+              accept="image/*"
+              onChange={(e) => setImage(e.target.files[0])}
+            />
+          </Button>
+
+          {image && (
+            <Box sx={{ mt: 2, textAlign: "center" }}>
+              <Typography sx={{ mb: 1 }}>{image.name}</Typography>
+              <img
+                src={URL.createObjectURL(image)}
+                alt="preview"
+                style={{ width: "100%", borderRadius: 12 }}
+              />
+            </Box>
+          )}
+
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            disabled={loading}
+            sx={{
+              background: "linear-gradient(90deg, #667eea, #764ba2)",
+              fontWeight: "bold",
+              py: 1.5,
+              "&:hover": { background: "linear-gradient(90deg, #764ba2, #667eea)" },
+            }}
+          >
+            {loading ? "Adding..." : "Add Blog"}
+          </Button>
+
+          {message && (
+            <Typography
+              sx={{ mt: 2, textAlign: "center", fontWeight: 500 }}
+              color={message.includes("successfully") ? "success.main" : "error"}
+            >
+              {message}
+            </Typography>
+          )}
+        </Stack>
+      </Container>
     </Box>
   );
 };
