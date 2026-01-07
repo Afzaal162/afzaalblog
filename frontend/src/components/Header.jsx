@@ -1,152 +1,107 @@
-import React, { useState, useEffect } from "react";
-import { Box, TextField, Button, ButtonGroup, Stack } from "@mui/material";
-import { useNavigate, useLocation } from "react-router-dom";
+import React from "react";
+import { Box, Typography, Button } from "@mui/material";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
-const categories = ["ALL", "WEBDEV", "APPDEV", "IOS DEV", "AI&ML"];
+const categories = [
+  { name: "WEBDEV", label: "Web Development" },
+  { name: "APPDEV", label: "App Development" },
+  { name: "IOS DEV", label: "iOS Development" },
+  { name: "AI&ML", label: "AI & Machine Learning" },
+];
 
-const Header = ({ search, setSearch, category, setCategory }) => {
+const Header = () => {
   const navigate = useNavigate();
-  const location = useLocation();
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const urlCategory = params.get("category") || "ALL";
-    setCategory(urlCategory);
-  }, [location.search, setCategory]);
-
-  const handleCategoryClick = (cat) => {
-    setCategory(cat);
-    const query = search.trim();
-    if (cat === "ALL") {
-      navigate(`/?${query ? `search=${encodeURIComponent(query)}` : ""}`);
-    } else {
-      navigate(
-        `/?category=${encodeURIComponent(cat)}${
-          query ? `&search=${encodeURIComponent(query)}` : ""
-        }`
-      );
-    }
-  };
-
-  const handleSearch = () => {
-    const query = search.trim();
-    if (category === "ALL") {
-      navigate(`/?${query ? `search=${encodeURIComponent(query)}` : ""}`);
-    } else {
-      navigate(
-        `/?category=${encodeURIComponent(category)}${
-          query ? `&search=${encodeURIComponent(query)}` : ""
-        }`
-      );
-    }
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") handleSearch();
+  const handleExplore = (cat) => {
+    navigate(`/?category=${encodeURIComponent(cat)}`);
   };
 
   return (
     <Box
       sx={{
-        p: 4,
-        mb: 3,
-        borderRadius: 3,
-        background: "rgba(255,255,255,0.25)",
-        backdropFilter: "blur(12px)",
-        boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
-        textAlign: "center",
+        p: { xs: 2, md: 4 },
+        mb: 4,
+        borderRadius: 4,
+        background:
+          "linear-gradient(135deg, rgba(102,126,234,0.25), rgba(118,75,162,0.25))",
+        backdropFilter: "blur(14px)",
+        boxShadow: "0 15px 35px rgba(0,0,0,0.15)",
+        overflow: "hidden",
       }}
     >
-      {/* Search Input & Button */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          flexWrap: "wrap",
-          gap: 1,
-        }}
+      {/* Heading */}
+      <Typography
+        variant="h4"
+        fontWeight="bold"
+        textAlign="center"
+        mb={3}
+        sx={{ color: "#1f2933" }}
       >
-        <TextField
-          label="Search blogs..."
-          variant="outlined"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          onKeyPress={handleKeyPress}
-          sx={{
-            width: { xs: "90%", sm: "300px" },
-            "& .MuiOutlinedInput-root": {
-              borderRadius: 2,
-              background: "rgba(255,255,255,0.6)",
-              "&.Mui-focused fieldset": {
-                borderColor: "#667eea",
-              },
-            },
-          }}
-        />
+        Explore Trending Categories 🚀
+      </Typography>
 
-        <Button
-          variant="contained"
-          onClick={handleSearch}
-          sx={{
-            background: "linear-gradient(90deg, #667eea, #764ba2)",
-            color: "#fff",
-            fontWeight: "bold",
-            borderRadius: 2,
-            transition: "0.3s",
-            "&:hover": {
-              background: "linear-gradient(90deg, #764ba2, #667eea)",
-              transform: "translateY(-2px)",
-            },
+      {/* Carousel Container */}
+      <Box sx={{ overflow: "hidden", position: "relative" }}>
+        <motion.div
+          style={{
+            display: "flex",
+            gap: "20px",
+          }}
+          animate={{
+            x: ["0%", "-100%"],
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: 25,
+            ease: "linear",
           }}
         >
-          Search
-        </Button>
-      </Box>
-
-      {/* Responsive Category Section */}
-      <Box
-        sx={{
-          mt: 3,
-          display: "flex",
-          justifyContent: "center",
-          overflowX: { xs: "auto", sm: "visible" },
-          pb: 1,
-        }}
-      >
-        <ButtonGroup
-          variant="outlined"
-          aria-label="categories"
-          sx={{
-            flexWrap: { xs: "nowrap", sm: "wrap" },
-            gap: 1,
-          }}
-        >
-          {categories.map((cat) => (
-            <Button
-              key={cat}
-              variant={cat === category ? "contained" : "outlined"}
-              onClick={() => handleCategoryClick(cat)}
+          {[...categories, ...categories].map((cat, index) => (
+            <Box
+              key={index}
               sx={{
-                fontWeight: "bold",
-                borderRadius: 2,
-                px: 2,
-                whiteSpace: "nowrap",
-                transition: "0.3s",
+                minWidth: { xs: 260, md: 300 },
+                p: 3,
+                borderRadius: 3,
                 background:
-                  cat === category
-                    ? "linear-gradient(90deg, #667eea, #764ba2)"
-                    : "transparent",
-                color: cat === category ? "#fff" : "inherit",
-                "&:hover": {
-                  transform: "translateY(-2px)",
-                  boxShadow: "0 6px 15px rgba(0,0,0,0.1)",
-                },
+                  "linear-gradient(135deg, #667eea, #764ba2)",
+                color: "#fff",
+                boxShadow: "0 12px 25px rgba(0,0,0,0.2)",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
               }}
             >
-              {cat}
-            </Button>
+              <Typography variant="h5" fontWeight="bold" mb={1}>
+                {cat.label}
+              </Typography>
+
+              <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                Discover latest articles, tutorials, and insights related to{" "}
+                {cat.label}.
+              </Typography>
+
+              <Button
+                onClick={() => handleExplore(cat.name)}
+                sx={{
+                  mt: 3,
+                  background: "#fff",
+                  color: "#5a4fcf",
+                  fontWeight: "bold",
+                  borderRadius: 2,
+                  "&:hover": {
+                    background: "#f1f1f1",
+                    transform: "translateY(-2px)",
+                  },
+                  transition: "0.3s",
+                }}
+              >
+                Explore →
+              </Button>
+            </Box>
           ))}
-        </ButtonGroup>
+        </motion.div>
       </Box>
     </Box>
   );
