@@ -3,48 +3,83 @@ import { Box, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const categories = [
-  { name: "WEBDEV", label: "Web Development" },
-  { name: "APPDEV", label: "App Development" },
-  { name: "IOS DEV", label: "iOS Development" },
-  { name: "AI&ML", label: "AI & Machine Learning" },
+  {
+    key: "WEBDEV",
+    title: "Web Development",
+    description: "Build modern websites, scalable backend systems and APIs.",
+    image:
+      "https://images.unsplash.com/photo-1581276879432-15a19d654956?q=80&w=1200",
+  },
+  {
+    key: "APPDEV",
+    title: "App Development",
+    description: "Create powerful Android and cross-platform mobile apps.",
+    image:
+      "https://images.unsplash.com/photo-1551650975-87deedd944c3?q=80&w=1200",
+  },
+  {
+    key: "IOS DEV",
+    title: "iOS Development",
+    description: "Design elegant apps for Apple's ecosystem using Swift.",
+    image:
+      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1200",
+  },
+  {
+    key: "AI&ML",
+    title: "AI & Machine Learning",
+    description: "Build intelligent systems powered by data and automation.",
+    image:
+      "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=1200",
+  },
 ];
 
 const Header = () => {
   const navigate = useNavigate();
 
-  const handleExplore = (cat) => {
-    navigate(`/?category=${encodeURIComponent(cat)}`);
+  const handleExplore = (category) => {
+    navigate(`/?category=${encodeURIComponent(category)}`);
   };
 
   return (
     <Box
       sx={{
-        p: { xs: 2, md: 4 },
-        mb: 4,
-        borderRadius: 4,
+        position: "relative",
+        p: { xs: 3, md: 5 },
+        mb: 5,
+        borderRadius: 5,
         background:
-          "linear-gradient(135deg, rgba(102,126,234,0.25), rgba(118,75,162,0.25))",
-        backdropFilter: "blur(14px)",
-        boxShadow: "0 15px 35px rgba(0,0,0,0.15)",
+          "linear-gradient(135deg, rgba(15,23,42,0.95), rgba(30,41,59,0.95))",
+        boxShadow: "0 30px 60px rgba(0,0,0,0.4)",
         overflow: "hidden",
       }}
     >
+      {/* Title */}
       <Typography
-        variant="h4"
+        variant="h3"
         fontWeight="bold"
         textAlign="center"
-        mb={3}
+        color="#fff"
+        mb={1}
       >
-        Explore Trending Categories 🚀
+        Explore Tech Categories 🚀
+      </Typography>
+
+      <Typography
+        textAlign="center"
+        color="rgba(255,255,255,0.7)"
+        mb={4}
+      >
+        High-quality blogs curated for modern developers
       </Typography>
 
       {/* Carousel */}
-      <Box sx={{ overflow: "hidden" }}>
+      <Box sx={{ overflow: "hidden", width: "100%" }}>
         <Box
           sx={{
             display: "flex",
-            gap: 2,
-            animation: "scroll 25s linear infinite",
+            gap: 4,
+            width: "max-content",
+            animation: "scroll 40s linear infinite",
             "@keyframes scroll": {
               "0%": { transform: "translateX(0)" },
               "100%": { transform: "translateX(-50%)" },
@@ -55,45 +90,82 @@ const Header = () => {
             <Box
               key={index}
               sx={{
-                minWidth: { xs: 260, md: 300 },
-                p: 3,
-                borderRadius: 3,
-                background:
-                  "linear-gradient(135deg, #667eea, #764ba2)",
-                color: "#fff",
-                boxShadow: "0 12px 25px rgba(0,0,0,0.2)",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                flexShrink: 0,
+                position: "relative",
+                minWidth: { xs: 320, sm: 420, md: 520 },
+                height: { xs: 260, md: 320 },
+                borderRadius: 4,
+                overflow: "hidden",
+                boxShadow: "0 25px 50px rgba(0,0,0,0.4)",
+                transition: "0.4s",
+                "&:hover": {
+                  transform: "scale(1.04)",
+                },
               }}
             >
-              <Typography variant="h5" fontWeight="bold">
-                {cat.label}
-              </Typography>
-
-              <Typography variant="body2" sx={{ opacity: 0.9, mt: 1 }}>
-                Discover latest articles, tutorials, and insights related to{" "}
-                {cat.label}.
-              </Typography>
-
-              <Button
-                onClick={() => handleExplore(cat.name)}
+              {/* Background Image */}
+              <Box
                 sx={{
-                  mt: 3,
-                  background: "#fff",
-                  color: "#5a4fcf",
-                  fontWeight: "bold",
-                  borderRadius: 2,
-                  "&:hover": {
-                    background: "#f1f1f1",
-                    transform: "translateY(-2px)",
-                  },
-                  transition: "0.3s",
+                  position: "absolute",
+                  inset: 0,
+                  backgroundImage: `url(${cat.image})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
+              />
+
+              {/* Overlay */}
+              <Box
+                sx={{
+                  position: "absolute",
+                  inset: 0,
+                  background:
+                    "linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.85))",
+                }}
+              />
+
+              {/* Content */}
+              <Box
+                sx={{
+                  position: "relative",
+                  zIndex: 1,
+                  height: "100%",
+                  p: 4,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  color: "#fff",
                 }}
               >
-                Explore →
-              </Button>
+                <Box>
+                  <Typography variant="h4" fontWeight="bold">
+                    {cat.title}
+                  </Typography>
+                  <Typography sx={{ mt: 1.5, opacity: 0.9 }}>
+                    {cat.description}
+                  </Typography>
+                </Box>
+
+                <Button
+                  onClick={() => handleExplore(cat.key)}
+                  variant="contained"
+                  sx={{
+                    alignSelf: "flex-start",
+                    background: "#6366f1",
+                    fontWeight: "bold",
+                    px: 4,
+                    py: 1.2,
+                    borderRadius: 3,
+                    textTransform: "none",
+                    "&:hover": {
+                      background: "#4f46e5",
+                      transform: "translateY(-2px)",
+                    },
+                    transition: "0.3s",
+                  }}
+                >
+                  Explore →
+                </Button>
+              </Box>
             </Box>
           ))}
         </Box>
