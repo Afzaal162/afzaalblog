@@ -22,14 +22,12 @@ const Home = () => {
 
   const API_URL = process.env.REACT_APP_API_URL;
 
-  // Extract search query from URL
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const q = params.get("search") || "";
     setSearch(q);
   }, [location.search]);
 
-  // Fetch blogs based on search or category
   useEffect(() => {
     const fetchBlogs = async () => {
       setLoading(true);
@@ -63,19 +61,20 @@ const Home = () => {
     <Box
       sx={{
         minHeight: "100vh",
-        background:
-          "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
-        py: 6,
+        width: "100%",
+        background: "radial-gradient(circle at top, #0f172a, #020617)",
+        py: { xs: 3, md: 6 },
       }}
     >
       <Container
-        maxWidth="lg"
+        maxWidth="xl"
         sx={{
-          background: "rgba(255,255,255,0.6)",
-          backdropFilter: "blur(12px)",
-          borderRadius: 4,
-          boxShadow: "0 20px 50px rgba(0,0,0,0.08)",
-          py: 5,
+          minHeight: "calc(100vh - 80px)",
+          background: "rgba(15, 23, 42, 0.65)",
+          backdropFilter: "blur(18px)",
+          borderRadius: 5,
+          boxShadow: "0 40px 80px rgba(0,0,0,0.7)",
+          py: { xs: 3, md: 5 },
         }}
       >
         {/* Header */}
@@ -92,9 +91,9 @@ const Home = () => {
             <Typography
               sx={{
                 textAlign: "center",
-                mt: 6,
+                mt: 8,
                 fontSize: "1.2rem",
-                color: "text.secondary",
+                color: "rgba(255,255,255,0.7)",
               }}
             >
               Loading blogs...
@@ -105,9 +104,9 @@ const Home = () => {
             <Typography
               sx={{
                 textAlign: "center",
-                mt: 6,
+                mt: 8,
                 fontSize: "1.2rem",
-                color: "text.secondary",
+                color: "rgba(255,255,255,0.7)",
               }}
             >
               No blogs found.
@@ -124,9 +123,9 @@ const Home = () => {
                 <Grid item xs={12} sm={6} md={4}>
                   <Box
                     sx={{
-                      transition: "0.3s ease",
+                      transition: "0.35s ease",
                       "&:hover": {
-                        transform: "translateY(-6px)",
+                        transform: "translateY(-10px) scale(1.01)",
                       },
                     }}
                   >
