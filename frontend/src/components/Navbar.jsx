@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   AppBar,
   Toolbar,
@@ -19,7 +19,18 @@ const Navbar = () => {
   const { isLoggedIn, logout } = useContext(AuthContext);
 
   const [anchorEl, setAnchorEl] = useState(null);
+  const [scrolled, setScrolled] = useState(false);
   const open = Boolean(anchorEl);
+
+  // 👉 Detect scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleMenu = (event) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
@@ -37,17 +48,21 @@ const Navbar = () => {
   ];
 
   const guestLinks = [{ label: "Login", path: "/login" }];
-
   const linksToRender = isLoggedIn ? authLinks : guestLinks;
 
   return (
     <AppBar
       position="sticky"
-      elevation={0}
+      elevation={scrolled ? 4 : 0}
       sx={{
-        background: "rgba(255,255,255,0.35)",
-        backdropFilter: "blur(14px)",
-        borderBottom: "1px solid rgba(255,255,255,0.3)",
+        background: scrolled
+          ? "#ffffff" // solid when scrolled
+          : "rgba(255,255,255,0.35)", // glass when top
+        backdropFilter: scrolled ? "none" : "blur(14px)",
+        borderBottom: scrolled
+          ? "1px solid #e5e7eb"
+          : "1px solid rgba(255,255,255,0.3)",
+        transition: "all 0.35s ease",
       }}
     >
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -57,7 +72,6 @@ const Navbar = () => {
           onClick={() => navigate("/")}
           sx={{
             fontWeight: 800,
-            letterSpacing: 0.5,
             cursor: "pointer",
             color: "#111",
             "&:hover": { color: "#667eea" },
@@ -90,7 +104,7 @@ const Navbar = () => {
             </Button>
           ))}
 
-          {/* Profile Icon */}
+          {/* Profile */}
           {isLoggedIn && (
             <IconButton
               component={Link}
@@ -130,31 +144,14 @@ const Navbar = () => {
             <MenuIcon sx={{ color: "#000" }} />
           </IconButton>
 
-          <Menu
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            PaperProps={{
-              sx: {
-                borderRadius: 2,
-                mt: 1,
-                minWidth: 160,
-              },
-            }}
-          >
+          <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
             {linksToRender.map((link) => (
               <MenuItem
                 key={link.label}
                 component={Link}
                 to={link.path}
                 onClick={handleClose}
-                sx={{
-                  fontWeight: 500,
-                  color: "#000",
-                  "&:hover": {
-                    background: "rgba(102,126,234,0.1)",
-                  },
-                }}
+                sx={{ color: "#000" }}
               >
                 {link.label}
               </MenuItem>
@@ -165,29 +162,14 @@ const Navbar = () => {
                 component={Link}
                 to="/profile"
                 onClick={handleClose}
-                sx={{
-                  fontWeight: 500,
-                  color: "#000",
-                  "&:hover": {
-                    background: "rgba(102,126,234,0.1)",
-                  },
-                }}
+                sx={{ color: "#000" }}
               >
                 Profile
               </MenuItem>
             )}
 
             {isLoggedIn && (
-              <MenuItem
-                onClick={handleLogout}
-                sx={{
-                  fontWeight: 500,
-                  color: "#000",
-                  "&:hover": {
-                    background: "rgba(225,29,72,0.12)",
-                  },
-                }}
-              >
+              <MenuItem onClick={handleLogout} sx={{ color: "#e11d48" }}>
                 Logout
               </MenuItem>
             )}
